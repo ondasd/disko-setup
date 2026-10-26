@@ -1,46 +1,62 @@
 {
   disko.devices = {
-    disk.main = {
-      device = "/dev/sda";  # замените на ваше устройство
-      type = "gpt";
-      content = {
-        partition = {
-          ESP = {
-            size = "1G";
-            type = "EF00";
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
+    disk = {
+      main = {
+        type = "disk";
+        device = "/dev/sda";
+        content = {
+          type = "gpt";
+          partitions = {
+            # Загрузочный раздел
+            ESP = {
+              size = "1G";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = [ "umask=0077" ];
+              };
             };
-          };
-          swap = {
-            size = "8G";
-            type = "8200";
-            content = {
-              type = "swap";
-            };
-          };
-          root = {
-            size = "100%";
-            type = "8300";
-            content = {
-              type = "btrfs";
-              extraArgs = [ "-f" ];
-              subvolumes = {
-                "/" = {
-                  mountpoint = "/";
-                  mountOptions = [ "subvol=root" "compress=zstd" ];
-                };
-                "/home" = {
-                  mountpoint = "/home";
-                  mountOptions = [ "subvol=home" "compress=zstd" ];
-                };
-                "/nix" = {
-                  mountpoint = "/nix";
-                  mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
+            
+            # Шифрованный раздел(всё остальное место)
+            luks = {
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "crypted";
+                settings.allowDiscards = true;
+                content = {
+                  type = "lvm_pv";
+                  vg = "pool";
                 };
               };
+            };
+          };
+        };
+      };
+    };
+    
+    # LVM-тома внутри luks-раздела
+    lvm_vg = {
+      pool = {
+        type = "lvm_vg";
+        lvs = {
+          # Раздел подкачки
+          swap = {
+            size = "8G";
+            content = {
+              type = "swap";
+              resumeDevice = true;
+            };
+          };
+          
+          # Корневой раздел
+          root = {
+            size = "100%";
+            content = {
+              type = "filesystem";
+              format = "btrfs";
+              mountpoint = "/";
             };
           };
         };
