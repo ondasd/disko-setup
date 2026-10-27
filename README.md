@@ -1,6 +1,7 @@
 RU:
 !сначало надо написать:
 sudo -i, 
+cd /tmp,
 git clone https://github.com/ondasd/disko-setup.git,
 cd /disko-setup,
 и только сейчас пишете bash install.sh
@@ -10,6 +11,7 @@ cd /disko-setup,
 EN:
 !first you need to write:
 sudo -i,
+cd /tmp,
 git clone https://github.com/ondasd/disko-setup.git,
 cd /disko-setup,
 And only now you are writing bash install.sh
