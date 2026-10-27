@@ -13,7 +13,7 @@ echo "change disk?:"
 read -p " change (yes/no): " answer
 case "$answer" in
     y|Y|yes|YES)
-        nano /disko-setup/disko-conf.sh
+        nano /disko-setup/disko-conf.nix
         ;;
     n|N|no|NO)
         echo "ok"
