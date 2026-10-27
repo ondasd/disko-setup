@@ -9,6 +9,20 @@ echo "--------------------------------------------------------------------------
 read -p "ENTER"
 git clone https://github.com/ondasd/disko-setup.git
 read -p "ENTER"
+echo "change disk?:"
+read -p " change (yes/no): " answer
+case "$answer" in
+    y|Y|yes|YES)
+        nano /disko-setup/disko-conf.sh
+        ;;
+    n|N|no|NO)
+        echo "ok"
+        ;;
+    *)
+    echo "Wrong answer"
+    ;;
+esac
+read -p "nice"
 touch Disko.nix
 read -p "ENTER"
 cp /tmp/disko-setup/disko-conf.nix /tmp/Disko.nix
