@@ -10,6 +10,7 @@
             # Загрузочный раздел
             ESP = {
               size = "1G";
+              type = "EF00";
               content = {
                 type = "filesystem";
                 format = "vfat";
